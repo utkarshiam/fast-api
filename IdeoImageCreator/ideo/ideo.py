@@ -69,7 +69,8 @@ class ImageGen:
             return limit_left, data
         except Exception as e:
             # Log the exception
-            print("Error occurred while getting limit left: %s", e, response.json())
+            print("response", response)
+            print("Error occurred while getting limit left: %s", e)
             
             # Return None indicating failure along with the error message and response details
             return None
