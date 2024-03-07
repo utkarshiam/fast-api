@@ -152,13 +152,16 @@ class ImageGen:
             # Print the type of response.content
             image_base64 = base64.b64encode(response.content).decode('utf-8')
             # Make HTTP request to the saveImages API
-            responseServer = requests.post(
-                        "https://onelink-developer.spotlightapis.com/",
-                        json={"fileBuffer": image_base64}
-            )
+            try:
+                responseServer = requests.post(
+                            "https://onelink-developer.spotlightapis.com/saveImages",
+                            json={"fileBuffer": image_base64}
+                )
+            except Exception as e:
+                print(e)
 
             if responseServer.status_code != 200:
-                raise Exception("Could not upload image")
+                raise Exception("Could not upload image", responseServer)
 
             # Assuming response contains the uploaded file information
             file_info = responseServer.json()["data"]
