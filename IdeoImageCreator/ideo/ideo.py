@@ -53,6 +53,9 @@ class ImageGen:
         self.session.headers["user-agent"] = ua.random
         url = f"{base_url}/api/images/sampling_available_v2?model_version=V_0_3"
         print("self.session", self.session, browser_version)
+        
+        lol = self.session.get("https://jsonplaceholder.typicode.com/todos/1", impersonate=browser_version)
+        print("lol",lol)
         r = self.session.get(url, impersonate=browser_version)
         if not r.ok:
             raise Exception("Can not get limit left.")
