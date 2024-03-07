@@ -142,7 +142,7 @@ class ImageGen:
             image_base64 = base64.b64encode(response.content).decode('utf-8')
             # Make HTTP request to the saveImages API
             responseServer = secondRequests.post(
-                        "http://localhost:3000/saveImages",
+                        "https://onelink-developer.spotlightapis.com/",
                         json={"fileBuffer": image_base64}
             )
 
