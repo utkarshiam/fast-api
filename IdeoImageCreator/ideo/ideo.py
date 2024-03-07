@@ -8,7 +8,6 @@ import base64
 from curl_cffi import requests
 from curl_cffi.requests import Cookies
 from fake_useragent import UserAgent
-import logger
 # import requests as secondRequests
 
 ua = UserAgent(browsers=["edge"])
@@ -67,7 +66,7 @@ class ImageGen:
             return max_creations_per_day - num_standard_generations_today
         except Exception as e:
             # Log the exception
-            logger.exception("Error occurred while getting limit left: %s", e)
+            print("Error occurred while getting limit left: %s", e)
             
             # Raise a custom exception or return a default value
             raise Exception("Failed to get limit left") from e
