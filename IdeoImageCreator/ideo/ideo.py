@@ -8,6 +8,7 @@ import base64
 from curl_cffi import requests
 from curl_cffi.requests import Cookies
 from fake_useragent import UserAgent
+import logger
 # import requests as secondRequests
 
 ua = UserAgent(browsers=["edge"])
@@ -50,20 +51,26 @@ class ImageGen:
         return Cookies(cookies_dict)
 
     def get_limit_left(self) -> int:
-        self.session.headers["user-agent"] = ua.random
-        url = f"{base_url}/api/images/sampling_available_v2?model_version=V_0_3"
-        print("self.session", self.session, browser_version)
-        
-        lol = self.session.get("https://jsonplaceholder.typicode.com/todos/1", impersonate=browser_version)
-        print("lol",lol)
-        r = self.session.get(url, impersonate=browser_version)
-        if not r.ok:
-            raise Exception("Can not get limit left.")
-        data = r.json()
-
-        return int(data["max_creations_per_day"]) - int(
-            data["num_standard_generations_today"]
-        )
+        try:
+            self.session.headers["user-agent"] = ua.random
+            url = f"{base_url}/api/images/sampling_available_v2?model_version=V_0_3"
+            r = self.session.get(url, impersonate=browser_version)
+            
+            # Check if the response is not okay (HTTP status code other than 200)
+            r.raise_for_status()
+            
+            data = r.json()
+            
+            max_creations_per_day = int(data["max_creations_per_day"])
+            num_standard_generations_today = int(data["num_standard_generations_today"])
+            
+            return max_creations_per_day - num_standard_generations_today
+        except Exception as e:
+            # Log the exception
+            logger.exception("Error occurred while getting limit left: %s", e)
+            
+            # Raise a custom exception or return a default value
+            raise Exception("Failed to get limit left") from e
 
     def _fetch_images_metadata(self, request_id):
         url = (
