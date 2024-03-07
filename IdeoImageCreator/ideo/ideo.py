@@ -53,23 +53,30 @@ class ImageGen:
         try:
             self.session.headers["user-agent"] = ua.random
             url = f"{base_url}/api/images/sampling_available_v2?model_version=V_0_3"
-            r = self.session.get(url, impersonate=browser_version)
+            response = self.session.get(url, impersonate=browser_version)
             
             # Check if the response is not okay (HTTP status code other than 200)
-            r.raise_for_status()
+            response.raise_for_status()
             
-            data = r.json()
+            data = response.json()
             
             max_creations_per_day = int(data["max_creations_per_day"])
             num_standard_generations_today = int(data["num_standard_generations_today"])
             
-            return max_creations_per_day - num_standard_generations_today
+            limit_left = max_creations_per_day - num_standard_generations_today
+            
+            # Return the limit left value and the response object
+            return limit_left, data
         except Exception as e:
             # Log the exception
-            print("Error occurred while getting limit left: %s", e, r)
+            print("Error occurred while getting limit left: %s", e, response)
             
-            # Raise a custom exception or return a default value
-            raise Exception("Failed to get limit left") from e
+            # Return None indicating failure along with the error message and response details
+            return None, {
+                "error": "Failed to get limit left",
+                "exception": str(e),
+                "response": response.json() if response else None
+            }
 
     def _fetch_images_metadata(self, request_id):
         url = (
