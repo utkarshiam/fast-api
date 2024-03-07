@@ -53,7 +53,8 @@ class ImageGen:
         try:
             self.session.headers["user-agent"] = ua.random
             url = f"{base_url}/api/images/sampling_available_v2?model_version=V_0_3"
-            response = self.session.get(url, impersonate=browser_version)
+            proxies = {'http': "219.243.212.118", 'https': "101.96.123.21"} 
+            response = self.session.get(url, proxies=proxies, impersonate=browser_version)
             
             # Check if the response is not okay (HTTP status code other than 200)
             response.raise_for_status()
