@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+mangum
+boto3
+curl_cffi
+fake-useragent
+requests
