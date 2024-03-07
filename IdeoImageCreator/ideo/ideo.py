@@ -8,7 +8,7 @@ import base64
 from curl_cffi import requests
 from curl_cffi.requests import Cookies
 from fake_useragent import UserAgent
-import requests as secondRequests
+# import requests as secondRequests
 
 ua = UserAgent(browsers=["edge"])
 
@@ -142,7 +142,7 @@ class ImageGen:
             # Print the type of response.content
             image_base64 = base64.b64encode(response.content).decode('utf-8')
             # Make HTTP request to the saveImages API
-            responseServer = secondRequests.post(
+            responseServer = requests.post(
                         "https://onelink-developer.spotlightapis.com/",
                         json={"fileBuffer": image_base64}
             )
