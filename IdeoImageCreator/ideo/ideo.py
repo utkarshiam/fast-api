@@ -69,14 +69,10 @@ class ImageGen:
             return limit_left, data
         except Exception as e:
             # Log the exception
-            print("Error occurred while getting limit left: %s", e, response)
+            print("Error occurred while getting limit left: %s", e, response.json())
             
             # Return None indicating failure along with the error message and response details
-            return None, {
-                "error": "Failed to get limit left",
-                "exception": str(e),
-                "response": response.json() if response else None
-            }
+            return None
 
     def _fetch_images_metadata(self, request_id):
         url = (
