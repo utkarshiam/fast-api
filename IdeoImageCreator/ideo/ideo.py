@@ -66,7 +66,7 @@ class ImageGen:
             return max_creations_per_day - num_standard_generations_today
         except Exception as e:
             # Log the exception
-            print("Error occurred while getting limit left: %s", e)
+            print("Error occurred while getting limit left: %s", e, r)
             
             # Raise a custom exception or return a default value
             raise Exception("Failed to get limit left") from e
